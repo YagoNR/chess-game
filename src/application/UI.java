@@ -1,6 +1,10 @@
 package application;
 
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 import chess.ChessPiece;
+import chess.ChessPosition;
 import chess.Color;
 
 public class UI {
@@ -26,6 +30,18 @@ public class UI {
 	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
 	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
+	public static ChessPosition reachChessPosition(Scanner sc) {
+		try {
+			String input = sc.nextLine();
+			char column = input.charAt(0);
+			int row = Integer.parseInt(input.substring(1));
+			return new ChessPosition(column, row);
+		}
+		catch (RuntimeException e) {
+			throw new InputMismatchException("Error reading ChessPosition. Valie values are from a1 to h8.");
+		}
+	}
+	
 	public static void printBoard(ChessPiece[][] pieces) {
 		System.out.print(ANSI_RED_BACKGROUND + "  a b c d e f g h   " + ANSI_RESET);
 		System.out.println();
@@ -42,12 +58,12 @@ public class UI {
 
 	private static void printPiece(ChessPiece piece) {
 		if (piece == null) {
-			System.out.print(ANSI_BLUE_BACKGROUND + "-" + ANSI_RESET);
+			System.out.print(ANSI_BLUE_BACKGROUND + "-");
 		} else {
 			if (piece.getColor() == Color.WHITE) {
-				System.out.print(ANSI_WHITE_BACKGROUND + ANSI_BLACK + piece + ANSI_RESET);
+				System.out.print(ANSI_WHITE_BACKGROUND + ANSI_BLACK + piece);
 			} else {
-				System.out.print(ANSI_BLACK_BACKGROUND + ANSI_WHITE + piece + ANSI_RESET);
+				System.out.print(ANSI_BLACK_BACKGROUND + ANSI_WHITE + piece);
 			}
 		}
 		System.out.print(ANSI_BLUE_BACKGROUND + " " + ANSI_RESET);
